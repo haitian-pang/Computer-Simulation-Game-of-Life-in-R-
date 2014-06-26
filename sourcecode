@@ -1,0 +1,47 @@
+library(png)
+setwd('path')  #the path to save the frame picture 
+
+
+
+org = round(runif(10000,min=0,max=1))
+
+orgData = matrix(org,nrow=100,ncol=100)
+
+##orgData[,] = 1    #assume  they are all alive
+
+
+resData = orgData
+
+for (times in 1:200){
+  writePNG(orgData, paste(times,".png",sep=''))
+  for (nRows in 2:99) {
+    for (nCols in 2:99){
+      nCount=orgData[(nRows-1),(nCols-1)]+
+        orgData[(nRows-1),nCols]+
+        orgData[(nRows-1),(nCols+1)]+
+        orgData[nRows,(nCols-1)] +
+        orgData[nRows,(nCols+1)]+
+        orgData[(nRows+1),(nCols-1)]+
+        orgData[(nRows+1),nCols]+
+        orgData[(nRows+1),(nCols+1)]
+      
+      if(nCount==3)
+      {
+        resData[nRows,nCols]=1
+      }
+      else
+      {
+        if(nCount==2)
+        {
+          resData[nRows,nCols]=orgData[nRows,nCols]
+        }
+        else
+        {
+          resData[nRows,nCols]=0
+        }
+      
+      }
+    }
+  }
+  orgData=resData  
+}
